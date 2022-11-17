@@ -59,21 +59,21 @@ export class AppStack extends Stack {
     });
 
     // Instances
-    // const publicInstance = new ec2.Instance(this, "PublicInstance", {
-    //   vpc,
-    //   machineImage: ec2.MachineImage.latestAmazonLinux(),
-    //   instanceType: new ec2.InstanceType("t3.small"),
-    //   vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
-    // });
-    // const privateInstanceWithEgress = new ec2.Instance(
-    //   this,
-    //   "PrivateInstanceWithEgress",
-    //   {
-    //     vpc,
-    //     machineImage: ec2.MachineImage.latestAmazonLinux(),
-    //     instanceType: new ec2.InstanceType("t3.small"),
-    //     vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-    //   }
-    // );
+    const publicInstance = new ec2.BastionHostLinux(this, "PublicBastion", {
+      vpc,
+      machineImage: ec2.MachineImage.latestAmazonLinux(),
+      instanceType: new ec2.InstanceType("t3.small"),
+      subnetSelection: { subnetType: ec2.SubnetType.PUBLIC },
+    });
+    const privateInstanceWithEgress = new ec2.BastionHostLinux(
+      this,
+      "PrivateBastionWithEgress",
+      {
+        vpc,
+        machineImage: ec2.MachineImage.latestAmazonLinux(),
+        instanceType: new ec2.InstanceType("t3.small"),
+        subnetSelection: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
+      }
+    );
   }
 }
