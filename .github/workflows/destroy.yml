@@ -39,21 +39,3 @@ jobs:
         run: |
           STACKNAME=$(npx @cdk-turnkey/stackname@1.2.0 --suffix app)
           npx cdk destroy --force --app 'npx ts-node bin/index.ts' ${STACKNAME}
-      
-      - name: Identify prod account and region
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "us-east-1"
-        run: |
-          aws sts get-caller-identity
-          echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
-
-      - name: Destroy (prod account)
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "us-east-1"
-        run: |
-          STACKNAME=$(npx @cdk-turnkey/stackname@1.2.0 --suffix app)
-          npx cdk destroy --force --app 'npx ts-node bin/index.ts' ${STACKNAME}
